@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    tools {
+        gradle 'Gradle-6.8'
+    }
+
+    stages {
+        stage("run yarn") {
+            steps {
+                echo 'executing yarn...'
+                nodejs('Node-15.5.1') {
+                    sh 'yarn install'
+                }
+            }
+        }
+        stage("run backend") {
+            steps {
+                echo 'excuting gradle...'
+                withGradle() {
+                    sh 'cd android && ./gradlew -v'
+                }
+            }
+        }
+    }
+}
